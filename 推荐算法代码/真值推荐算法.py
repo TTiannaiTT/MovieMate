@@ -1,44 +1,46 @@
-import pymysql
 import pandas as pd
 
-
-# 连接MySQL数据库
-def connect_db():
+# 从 Excel 文件中获取电影及评分数据
+def get_movie_ratings_from_excel(file_path):
     """
     功能:
-    - 连接到MySQL数据库并返回连接对象。
-
-    输出:
-    - connection: MySQL数据库连接对象，用于执行SQL查询和更新操作。
-    """
-    connection = pymysql.connect(
-        host='localhost',  # 数据库地址
-        user='root',  # 数据库用户名
-        password='123456',  # 数据库密码
-        database='moviemate',  # 目标数据库名称
-        charset='utf8mb4'  # 字符编码
-    )
-    return connection
-
-
-# 从数据库中获取电影及评分数据
-def get_movie_ratings(connection):
-    """
-    功能:
-    - 从数据库中获取电影和多个来源的评分数据，返回pandas DataFrame。
+    - 从Excel文件中获取电影和评分数据，返回pandas DataFrame。
 
     输入:
-    - connection: MySQL数据库连接对象。
+    - file_path: str类型，Excel文件的路径。
 
     输出:
-    - DataFrame: 包含电影ID、电影名称、评分来源及对应评分的DataFrame数据结构。
+    - DataFrame: 包含电影名称、来源及评分的DataFrame数据结构。
     """
-    query = """
-    SELECT movies.movie_id, movies.title, ratings.source, ratings.rating
-    FROM movies
-    JOIN ratings ON movies.movie_id = ratings.movie_id;
-    """
-    return pd.read_sql(query, connection)
+    # 读取 Excel 文件
+    df = pd.read_excel(file_path)
+
+    # 确保评分列为数值类型
+    df['IMDb评分'] = pd.to_numeric(df['IMDb评分'], errors='coerce')
+    df['猫眼评分'] = pd.to_numeric(df['猫眼评分'], errors='coerce')
+    df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
+
+    # 将 IMDb评分、猫眼评分 和 豆瓣评分 作为评分来源
+    ratings_list = []
+
+    # IMDb 评分
+    for index, row in df.iterrows():
+        if not pd.isnull(row['IMDb评分']):
+            ratings_list.append({'movie_id': index, 'title': row['title'], 'source': 'IMDb', 'rating': row['IMDb评分']})
+
+    # 猫眼 评分
+    for index, row in df.iterrows():
+        if not pd.isnull(row['猫眼评分']):
+            ratings_list.append({'movie_id': index, 'title': row['title'], 'source': '猫眼', 'rating': row['猫眼评分']})
+
+    # 豆瓣 评分
+    for index, row in df.iterrows():
+        if not pd.isnull(row['rating']):
+            ratings_list.append({'movie_id': index, 'title': row['title'], 'source': '豆瓣', 'rating': row['rating']})
+
+    # 转换成 DataFrame
+    ratings_df = pd.DataFrame(ratings_list)
+    return ratings_df
 
 
 # 计算每个数据源的初始可信度
@@ -70,24 +72,37 @@ def update_trustworthiness(movie_ratings, max_iterations=100, tolerance=0.001):
     输出:
     - trustworthiness: 更新后的可信度字典，包含每个数据源的最终可信度。
     """
+    # 获取所有唯一的评分来源
     unique_sources = movie_ratings['source'].unique()
-    trustworthiness = initialize_trust(unique_sources)
-    movie_ratings['final_rating'] = 0
-    movie_ratings['weighted_rating'] = 0
 
+    # 初始化每个数据源的可信度
+    trustworthiness = initialize_trust(unique_sources)
+
+    # 为存储最终评分和加权差值添加新列，并指定数据类型为浮点数
+    movie_ratings['final_rating'] = 0.0
+    movie_ratings['weighted_rating'] = 0.0
+
+    # 进行最大迭代次数
     for _ in range(max_iterations):
+        # 记录当前的可信度
         previous_trust = trustworthiness.copy()
 
-        # 计算加权评分
+        # 计算每部电影的加权评分
         for movie_id in movie_ratings['movie_id'].unique():
+            # 筛选出当前电影的所有评分记录
             movie_df = movie_ratings[movie_ratings['movie_id'] == movie_id]
+
+            # 计算当前电影的总权重（所有来源的可信度总和）
             total_weight = sum(trustworthiness[source] for source in movie_df['source'])
             if total_weight == 0:
-                continue
+                continue  # 如果总权重为0，则跳过计算
 
+            # 计算加权评分的加权和
             weighted_sum = sum(
                 trustworthiness[row['source']] * row['rating'] for _, row in movie_df.iterrows()
             )
+
+            # 计算最终评分
             final_rating = weighted_sum / total_weight
             movie_ratings.loc[movie_ratings['movie_id'] == movie_id, 'final_rating'] = final_rating
 
@@ -95,26 +110,26 @@ def update_trustworthiness(movie_ratings, max_iterations=100, tolerance=0.001):
             for _, row in movie_df.iterrows():
                 weighted_diff = abs(final_rating - row['rating'])
                 movie_ratings.loc[(movie_ratings['movie_id'] == movie_id) & (
-                            movie_ratings['source'] == row['source']), 'weighted_rating'] = weighted_diff
+                        movie_ratings['source'] == row['source']), 'weighted_rating'] = weighted_diff
 
-        # 根据加权差值更新可信度
+        # 根据加权差值更新每个数据源的可信度
         for source in unique_sources:
             source_diffs = movie_ratings[movie_ratings['source'] == source]['weighted_rating']
+            # 使用差值的均值计算可信度，较小的差值表示更高的可信度
             trustworthiness[source] = 1.0 / (1.0 + source_diffs.mean())
 
-        # 检查收敛条件
+        # 检查是否达到收敛条件
         trust_diff = max(abs(trustworthiness[source] - previous_trust[source]) for source in unique_sources)
         if trust_diff < tolerance:
-            break
+            break  # 如果可信度变化小于容差值，则停止迭代
 
     return trustworthiness
-
 
 # 更新电影的最终评分
 def update_final_ratings(movie_ratings, trustworthiness):
     """
     功能:
-    - 对于每一部电影，选择可信度最高的评分作为最终评分，并更新到DataFrame中。
+    - 对于每一部电影，计算加权评分，考虑所有评分来源，并更新到DataFrame中。
 
     输入:
     - movie_ratings: 包含电影评分数据的DataFrame。
@@ -123,41 +138,49 @@ def update_final_ratings(movie_ratings, trustworthiness):
     输出:
     - 无直接输出，更新后的最终评分将存储在 movie_ratings 的 'final_rating' 列中。
     """
+    # 对于每部电影，计算其最终评分
     for movie_id in movie_ratings['movie_id'].unique():
+        # 筛选出当前电影的所有评分记录
         movie_df = movie_ratings[movie_ratings['movie_id'] == movie_id]
-        best_source = movie_df.loc[movie_df['source'].isin(trustworthiness.keys())]['source'].iloc[0]
-        best_rating = movie_df[movie_df['source'] == best_source]['rating'].values[0]
-        movie_ratings.loc[movie_ratings['movie_id'] == movie_id, 'final_rating'] = best_rating
+
+        # 计算当前电影的总权重（所有来源的可信度总和）
+        total_weight = sum(trustworthiness[source] for source in movie_df['source'])
+        if total_weight == 0:
+            continue  # 如果总权重为0，则跳过计算
+
+        # 计算加权评分的加权和
+        weighted_sum = sum(
+            trustworthiness[row['source']] * row['rating'] for _, row in movie_df.iterrows()
+        )
+
+        # 计算最终评分
+        final_rating = weighted_sum / total_weight
+        # 将最终评分存储到 DataFrame 中
+        movie_ratings.loc[movie_ratings['movie_id'] == movie_id, 'final_rating'] = final_rating
 
 
-# 保存最终评分到数据库
-def save_final_ratings(connection, movie_ratings):
+# 保存最终评分到Excel
+def save_final_ratings_to_excel(movie_ratings, output_file):
     """
     功能:
-    - 将每部电影的最终评分更新保存到数据库中。
+    - 将每部电影的最终评分保存到 Excel 文件中。
 
     输入:
-    - connection: MySQL数据库连接对象。
     - movie_ratings: 包含电影评分数据的DataFrame。
+    - output_file: str类型，保存的Excel文件路径。
 
     输出:
-    - 无直接输出，更新后的数据被写回数据库。
+    - 无直接输出，更新后的数据被写入Excel文件中。
     """
-    cursor = connection.cursor()
-    for movie_id in movie_ratings['movie_id'].unique():
-        final_rating = movie_ratings[movie_ratings['movie_id'] == movie_id]['final_rating'].values[0]
-        cursor.execute(
-            "UPDATE movies SET final_rating=%s WHERE movie_id=%s",
-            (final_rating, movie_id)
-        )
-    connection.commit()
+    # 将 movie_ratings 中的最终评分列保存为 Excel 文件
+    movie_ratings[['movie_id', 'title', 'final_rating']].to_excel(output_file, index=False)
 
 
 # 主函数
 def main():
     """
     功能:
-    - 主函数，负责执行所有操作：连接数据库，获取电影及评分数据，计算可信度，更新最终评分并保存到数据库。
+    - 主函数，负责执行所有操作：从Excel文件中获取电影及评分数据，计算可信度，更新最终评分并保存到Excel。
 
     输入:
     - 无直接输入
@@ -165,10 +188,10 @@ def main():
     输出:
     - 无直接输出
     """
-    connection = connect_db()
+    file_path = '豆瓣电影_合并评分.xlsx'
 
     # 获取电影及其评分数据
-    movie_ratings = get_movie_ratings(connection)
+    movie_ratings = get_movie_ratings_from_excel(file_path)
 
     # 进行可信度更新，直到收敛
     trustworthiness = update_trustworthiness(movie_ratings)
@@ -176,10 +199,9 @@ def main():
     # 更新每部电影的最终评分
     update_final_ratings(movie_ratings, trustworthiness)
 
-    # 保存最终评分到数据库
-    save_final_ratings(connection, movie_ratings)
+    # 保存最终评分到 Excel 文件
+    save_final_ratings_to_excel(movie_ratings, '豆瓣电影_最终评分.xlsx')
 
-    connection.close()
     print("评分更新完成！")
 
 

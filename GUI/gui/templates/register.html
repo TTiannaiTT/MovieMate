@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #e73c7e, #23a6d5, #23d5ab);
+            background-size: cover;
+            animation: BackgroundAnimation 20s ease infinite;
+        }
+        @keyframes BackgroundAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-size: 150% 150%;
+            }
+            100% {
+                background-position: 100% 50%;
+                background-size: cover;
+            }
+        }
+        .register-container {
+            width: 300px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .register-container:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            margin: 10px 0;
+        }
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-right: 10px;
+        }
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: calc(100% - 22px);
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: #e60000;
+        }
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://via.placeholder.com/1500') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+            opacity: 0.1;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    <div class="register-container">
+        <form action='/dev/register/' method='post'>
+            {% csrf_token %}
+            <p><label>Username:</label><input name="user" type="text"></p>
+            <p><label>Password:</label><input name="password" type="password"></p>
+            <input type="submit" value="Register">
+        </form>
+    </div>
+    <script>
+        // Dynamic effects
+        const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#5cb85c';
+            });
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#ddd';
+            });
+        });
+    </script>
+</body>
+</html>

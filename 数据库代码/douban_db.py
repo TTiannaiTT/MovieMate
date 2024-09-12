@@ -89,11 +89,23 @@ def read_excel(file_path):
         print('读取Excel文件时发生异常：', e)
         raise
 
+def read_csv(file_path):
+    try:
+        # 读取 CSV 文件
+        df = pd.read_csv(file_path, dtype=str)
+        # 替换 NaN 值为 ''
+        df.fillna('', inplace=True)
+        # 将 DataFrame 转换为列表
+        return df.values.tolist()
+    except Exception as e:
+        print('读取CSV文件时发生异常：', e)
+        raise
+
 
 def best_15_movies(cursor):
     try:
         # 编写SQL查询语句，按评分降序排列，并限制结果为前15条
-        sql = 'SELECT title, rating, poster_url FROM douban_movies ORDER BY rating DESC LIMIT 100'
+        sql = 'SELECT title, rating, poster_url , detail_url FROM douban_movies ORDER BY rating DESC LIMIT 100'
         # 执行SQL查询
         cursor.execute(sql)
         # 获取查询结果
@@ -101,22 +113,19 @@ def best_15_movies(cursor):
         # 处理结果
         best_movies = []
         for row in results:
-            movie_name, rating, poster_url = row
+            movie_name, rating, poster_url, detail_url = row
             best_movies.append({
                 'title': movie_name,
                 'rating': rating,
-                'poster_url': poster_url
+                'poster_url': poster_url,
+                'detail_url':detail_url
             })
-        #评分最高的100部电影
-        best_100_movies_poster_url = []
-        for movie in best_movies:
-            poster_url = movie['poster_url']
-            if poster_url not in best_100_movies_poster_url:
-                best_100_movies_poster_url.append(poster_url)
-
         best_15_movies_poster_url = []
-        for i in range(15):
-            best_15_movies_poster_url.append(best_100_movies_poster_url[i])
+        best_15_movies_detail_url = []
+        for movie in best_movies:
+            if movie['poster_url'] not in best_15_movies_poster_url:
+                best_15_movies_poster_url.append(movie['poster_url'])
+                best_15_movies_detail_url.append(movie['detail_url'])
 
         # 读取现有的JSON文件
         with open(r'D:\PythonProject\moviemate\movie-reommendation-system\GUI\gui\webGUI\static\assets\userData\home.json','r', encoding='utf-8') as file:
@@ -124,6 +133,7 @@ def best_15_movies(cursor):
         if data:
             # 更新imgurls字段
             data['imgurls'] = best_15_movies_poster_url
+            data['detail_urls'] = best_15_movies_detail_url
         # 将更新后的数据写回到JSON文件
         with open(r'D:\PythonProject\moviemate\movie-reommendation-system\GUI\gui\webGUI\static\assets\userData\home.json','w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
@@ -194,13 +204,14 @@ def main():
     try:
         connection = pymysql.connect(host=host, user=user, password=password, port=port, database=database, charset=charset)
         with connection.cursor() as cursor:
-            #评分最高的某一类别电影
-            genre = '科幻'
-            best_15_movies_genre = best_10_movies_by_genre(cursor, genre)
-            print(best_15_movies_genre)
-
             best_movies = best_15_movies(cursor)
             print(best_movies)
+
+            # #评分最高的某一类别电影
+            # genre = '科幻'
+            # best_15_movies_genre = best_10_movies_by_genre(cursor, genre)
+            # print(best_15_movies_genre)
+
             # create_database(cursor, database)
             # cursor.execute(f"USE {database}")
             #
@@ -211,10 +222,10 @@ def main():
             #
             # print('数据长度', len(data))
             #
-            # #delete_all_douban_data(cursor)
+            # delete_all_douban_data(cursor)
             # add_all_douban_data(cursor, data)
             # print("数据添加完成。")
-            #
+
             # print("准备查询数据...")
             # search_movie_title = input('请输入要查询的电影的名称：')
             # if search_movie_title.strip():

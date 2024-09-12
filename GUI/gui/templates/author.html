@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Author - MovieMate</title>
+	<link rel="icon" href="/static/assets/img/logo.png" type="image/png">
+    <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
+    <link rel="stylesheet" href="/static/assets/css/app.css">
+    <link rel="stylesheet" href="/static/assets/css/theme.css">
+ <style>
+	  body {
+            background-image: url('/static/assets/img/pattern.png'); /* 替换成你的图案路径 */
+            background-repeat: repeat; /* 重复图案 */
+            background-size: cover; /* 覆盖整个页面 */
+            background-position: center center; /* 图案居中 */
+        }
+        /* 导航栏样式 */
+        .navbar-collapse {
+            padding: 0 15px;
+        }
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+        /* 搜索框容器样式 */
+        .search-container {
+            position: relative;
+            margin-right: 20px;
+        }
+        .search-form {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+        .search-form input[type="text"] {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+        .search-form input[type="submit"] {
+            background-color:  #e99;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 25px;
+            transition: background-color 0.3s ease;
+        }
+        .search-form input[type="submit"]:hover {
+            background-color: #d88;
+        }
+        /* 搜索图标样式 */
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <a class="navbar-brand font-weight-bolder mr-3" href="/static/assets/img/img.png"><img src="/static/assets/img/logo.png"></a>
+    <button class="navbar-light navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsDefault">
+    	    	<ul class="navbar-nav mr-auto align-items-center">
+		 <li class="nav-item">
+                <div class="search-container">
+                    <form action='/dev/index/' method='post' class="search-form">
+                        {% csrf_token %}
+                        <i class="search-icon fas fa-search"></i>
+                        <input type="text" name="search" placeholder="Search..." required>
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
+            </li>
+    	</ul>
+    	<ul class="navbar-nav ml-auto align-items-center">
+    		<li class="nav-item">
+    		<a class="nav-link active" href="../index">Home</a>
+    		</li>
+    		<li class="nav-item">
+    		<a class="nav-link" href="../post">Comment</a>
+    		</li>
+    		<li class="nav-item">
+    		<a class="nav-link" href="../author"><img class="rounded-circle mr-2" src="/static/assets/img/av.png" width="30"><span class="align-middle">Me</span></a>
+    		</li>
+    		<li class="nav-item dropdown">
+    		<a class="nav-link" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    		<svg style="margin-top:10px;" class="_3DJPT" version="1.1" viewbox="0 0 32 32" width="21" height="21" aria-hidden="false" data-reactid="71"><path d="M7 15.5c0 1.9-1.6 3.5-3.5 3.5s-3.5-1.6-3.5-3.5 1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5zm21.5-3.5c-1.9 0-3.5 1.6-3.5 3.5s1.6 3.5 3.5 3.5 3.5-1.6 3.5-3.5-1.6-3.5-3.5-3.5zm-12.5 0c-1.9 0-3.5 1.6-3.5 3.5s1.6 3.5 3.5 3.5 3.5-1.6 3.5-3.5-1.6-3.5-3.5-3.5z" data-reactid="22"></path></svg>
+    		</a>
+    		<div class="dropdown-menu dropdown-menu-right shadow-lg" aria-labelledby="dropdown02">
+    			<h4 class="dropdown-header display-4">Easter Egg !</h4>
+    			<div class="dropdown-divider">
+    			</div>
+    			<span class="dropdown-item"><a href="../chat" class="btn btn-primary d-block"><i class="fa fa-child"></i> Try now</a></span>
+    		</div>
+    		</li>
+    	</ul>
+    </div>
+    </nav>    
+    <main role="main">
+        
+    
+    <div class="jumbotron border-round-0 min-50vh" style="background-image:url(https://images.unsplash.com/photo-1522204657746-fccce0824cfd?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=84b5e9bea51f72c63862a0544f76e0a3&auto=format&fit=crop&w=1500&q=80);">
+    </div>
+    <div class="container mb-4">
+    	<img src="/static/assets/img/av.png" class="mt-neg100 mb-4 rounded-circle" width="128">
+    	<h1 class="font-weight-bold title">User Name</h1>
+    	<p>
+    		I love Art, Web Design, Photography, Design, Illustration.
+    	</p>
+    </div>
+    <div class="container-fluid mb-5">
+    	<div class="row">
+    		<div class="card-columns">
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1489743342057-3448cc7c3bb9?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6d284a2efbca5f89528546307f7e7b87&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1519996521430-02b798c1d881?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=79f770fc1a5d8ff9b0eb033d0f09e15d&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1505210512658-3ae58ae08744?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2ef2e23adda7b89a804cf232f57e3ca3&auto=format&fit=crop&w=333&q=80" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1488353816557-87cd574cea04?ixlib=rb-0.3.5&s=06371203b2e3ad3e241c45f4e149a1b3&auto=format&fit=crop&w=334&q=80" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1518450757707-d21c8c53c8df?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c88b5f311958f841525fdb01ab3b5deb&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1483190656465-2c49e54d29f3?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=7c4d831daffc28f6ce144ae9e44072e2&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1501813531019-338a4182efb0?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ad934c7483b928cae6b0b9cde5ae3445&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1518542331925-4e91e9aa0074?ixlib=rb-0.3.5&s=6958cfb3469de1e681bf17587bed53be&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1513028179155-324cfec2566c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=32ce1df4016dadc177d6fce1b2df2429&auto=format&fit=crop&w=350&q=80" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1516601255109-506725109807?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ce4f3db9818f60686e8e9b62d4920ce5&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1509233631037-deb7efd36207?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=75a5d784cdfc8f5ced8a6fe26c6d921e&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-0.3.5&s=c0043ea5aa03f62a294636f93725dd6e&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1485627658391-1365e4e0dbfe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=976b0db5c3c2b9932bb20e72f98f9b61&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1502550900787-e956c314a221?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=e90f191de3a03c2002ac82c009490e07&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=9e3cd6ce6496c9c05cbf1b6cda8be0f9&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1509885903707-b68568db61ed?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=5f11503655b51165836c2dcefa51a040&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1518707399486-6d702a84ff00?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=b5bb16fa7eaed1a1ed47614488f7588d&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1519408299519-b7a0274f7d67?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d4891b98f4554cc55eab1e4a923cbdb1&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1506706435692-290e0c5b4505?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=0bb464bb1ceea5155bc079c4f50bc36a&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="card card-pin">
+    				<img class="card-img" src="https://images.unsplash.com/photo-1512355144108-e94a235b10af?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c622d56d975113a08c71c912618b5f83&auto=format&fit=crop&w=500&q=60" alt="Card image">
+    				<div class="overlay">
+    					<h2 class="card-title title">Movie Information</h2>
+    					<div class="more">
+    						<a href="post.html">
+    						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> More </a>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+        
+    </main>
+
+    <script src="/static/assets/js/app.js"></script>
+    <script src="/static/assets/js/theme.js"></script>
+    
+    <footer class="footer pt-5 pb-5 text-center">
+        
+    <div class="container">
+        
+    <div class="container">
+		<a class="nav-link" href="#">Contact us:</a>
+
+          <div class="socials-media">
+
+            <ul class="list-unstyled">
+<!--              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-twitter"></i></a></li>-->
+<!--              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-instagram"></i></a></li>-->
+<!--              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-google-plus"></i></a></li>-->
+              <li class="d-inline-block ml-1 mr-1"><a href="weixin://contacts/profile/john13392127469" class="text-dark"><i class="fa fa-wechat"></i></a></li>
+              <li class="d-inline-block ml-1 mr-1"><a href="https://github.com/TTiannaiTT/MovieMate" class="text-dark"><i class="fa fa-github"></i></a></li>
+			  <li class="d-inline-block ml-1 mr-1"><a href="mailto:213221787@seu.edu.cn" class="text-dark"><i class="fa fa-envelope"></i></a></li>
+            </ul>
+
+          </div>
+
+            <!--
+              All the links in the footer should remain intact.
+              You may remove the links only if you donate:
+              https://www.wowthemes.net/freebies-license/
+            -->
+          <p>©  <span class="credits font-weight-bold">
+            <a target="_blank" class="text-dark" href="https://ttiannaitt.github.io/">MovieMate Website & chatbot by <u>Yukun Tian;</u></a>
+          </span>
+			  <span class="credits font-weight-bold">
+			  <a target="_blank" class="text-dark" href="https://github.com/yuqiansheng">MM Rating by <u>ZiHan Liu;</u></a>
+			</span>
+			  <span class="credits font-weight-bold">
+			  <a target="_blank" class="text-dark" href="https://github.com/cyber-lin">Database by <u>Junlin Chen.</u></a>
+			</span>
+          </p>
+
+
+        </div>
+        
+    </footer>
+<script>
+	   document.addEventListener('DOMContentLoaded', function() {
+        // 创建一个新的 XMLHttpRequest 对象
+        var xhr = new XMLHttpRequest();
+        // 配置请求类型、URL 以及异步处理方式
+        xhr.open('GET', '/static/assets/userData/author.json', true);
+        // 设置请求头，指明接受 JSON 格式的响应
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        // 当请求完成时执行的函数
+        xhr.onload = function() {
+            if (this.status === 200) {
+                try {
+                    // 解析 JSON 响应文本
+                    var data = JSON.parse(this.responseText);
+                    // 假设 JSON 文件中有一个名为 imgurls 的数组
+                    var imageUrls = data.imgurls;
+                    // 获取所有 card-pin 元素
+                    var cards = document.querySelectorAll('.card-pin');
+                    // 将图片 URL 设置到 card-pin 的 img 元素上
+                    cards.forEach(function(card, index) {
+                        if (imageUrls[index]) { // 确保有对应的 URL
+                            card.querySelector('.card-img').src = imageUrls[index];
+                        }
+                    });
+				var links = document.querySelectorAll('.more a');
+					var detail_Urls = data.detail_urls;
+					links.forEach(function(link, index) {
+					link.href = detail_Urls[index];
+				});
+
+                     var imageUrl = data.target.img;
+                    // 更新图片元素
+                    var cardImage = document.querySelector('.card-img-top');
+                    if (cardImage) {
+                        cardImage.src = imageUrl;
+                    }
+                    var targetData = data.target;
+                    // 获取列表元素
+                    var list = document.getElementById('ingredients-list');
+					var keysToInclude = ['MM Rating', 'Category', 'Star', 'Date'];
+
+                    // 遍历指定的键并添加到列表中
+                    keysToInclude.forEach(function(key) {
+                        if (targetData.hasOwnProperty(key)) {
+                            var listItem = document.createElement('li');
+                            listItem.textContent = key + ':   ' + targetData[key];
+                            list.appendChild(listItem);
+                        }
+                    });
+
+				var userNameElement = document.querySelector('.title');
+                // 将JSON中的user_name替换到User Name中
+                userNameElement.textContent = data.target.user_name;
+
+                    var link = document.querySelector('.btn-gray200');
+        			link.href = targetData['url']; // 将这里的 URL 替换为您想要设置的 URL
+ 					var heading = document.querySelector('.card-title.display-4');
+					// 设置新的文本内容
+					heading.textContent = targetData['Name']; // 将这里的 '新标题' 替换为您想要设置的新文本
+
+
+				 document.addEventListener('DOMContentLoaded', function() {
+
+    });
+
+                } catch (e) {
+                    console.error('Error parsing JSON!', e);
+                }
+            }
+        };
+        // 发送请求
+        xhr.send();
+<!--               // 获取搜索按钮-->
+        var searchButton = document.getElementById('search-button');
+
+<!--        // 绑定点击事件-->
+        searchButton.addEventListener('click', function(event) {
+<!--            // 阻止表单的默认提交行为-->
+            event.preventDefault();
+
+<!--            // 获取输入框的值-->
+            var searchTerm = document.getElementById('search-input').value;
+
+<!--            // 构建跳转的 URL-->
+<!--&lt;!&ndash;            var newUrl = 'https://example.com/search?query=' + encodeURIComponent(searchTerm);&ndash;&gt;-->
+			var newUrl = 'http://127.0.0.1:8000/dev/post/'
+<!--            // 跳转到指定网址-->
+            window.location.href = newUrl;
+        });
+    });
+</script>
+</body>
+    
+</html>

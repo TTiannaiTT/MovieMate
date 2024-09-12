@@ -1,0 +1,50 @@
+{
+    "target": {
+        "user_name": "moviemate",
+        "user-password": "123456"
+    },
+    "imgurls": [
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2561716440.webp",
+        "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p678761517.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p457760035.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2549507296.webp",
+        "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p792394752.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2186920269.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2557573348.webp",
+        "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p1344888983.webp",
+        "https://img2.doubanio.com/view/photo/s_ratio_poster/public/p533908031.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2011424828.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2659833745.webp",
+        "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p1194162603.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2507646179.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p646744389.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2361744534.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p692813374.webp",
+        "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2554525534.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2243627008.webp",
+        "https://img3.doubanio.com/view/photo/s_ratio_poster/public/p511146957.webp",
+        "https://img1.doubanio.com/view/photo/s_ratio_poster/public/p451926968.webp"
+    ],
+    "detail_urls": [
+        "https://movie.douban.com/subject/1291546/",
+        "https://movie.douban.com/subject/1938022/",
+        "https://movie.douban.com/subject/1292722/",
+        "https://movie.douban.com/subject/1440898/",
+        "https://movie.douban.com/subject/1777612/",
+        "https://movie.douban.com/subject/1393859/",
+        "https://movie.douban.com/subject/1291561/",
+        "https://movie.douban.com/subject/2297265/",
+        "https://movie.douban.com/subject/1309078/",
+        "https://movie.douban.com/subject/1424406/",
+        "https://movie.douban.com/subject/1305409/",
+        "https://movie.douban.com/subject/1580620/",
+        "https://movie.douban.com/subject/2983391/",
+        "https://movie.douban.com/subject/1309003/",
+        "https://movie.douban.com/subject/5045678/",
+        "https://movie.douban.com/subject/1291545/",
+        "https://movie.douban.com/subject/25958717/",
+        "https://movie.douban.com/subject/1300860/",
+        "https://movie.douban.com/subject/1292001/",
+        "https://movie.douban.com/subject/1291843/"
+    ]
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="/static/assets/css/style.css">
+    <link rel="icon" href="/static/assets/img/logo.png" type="image/png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            <div id="chat-window"></div>
+        </div>
+        <form id="chat-form">
+            <input type="text" id="user_input" placeholder="Type your message...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+<!--    <div class="container">-->
+
+<!--    <div class="container">-->
+<!--		<a class="nav-link" href="#">Contact us:</a>-->
+
+<!--          <div class="socials-media">-->
+
+<!--            <ul class="list-unstyled">-->
+<!--&lt;!&ndash;              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-twitter"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-instagram"></i></a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;              <li class="d-inline-block ml-1 mr-1"><a href="#" class="text-dark"><i class="fa fa-google-plus"></i></a></li>&ndash;&gt;-->
+<!--              <li class="d-inline-block ml-1 mr-1"><a href="weixin://contacts/profile/john13392127469" class="text-dark"><i class="fa fa-wechat"></i></a></li>-->
+<!--              <li class="d-inline-block ml-1 mr-1"><a href="https://github.com/TTiannaiTT/MovieMate" class="text-dark"><i class="fa fa-github"></i></a></li>-->
+<!--			  <li class="d-inline-block ml-1 mr-1"><a href="mailto:213221787@seu.edu.cn" class="text-dark"><i class="fa fa-envelope"></i></a></li>-->
+<!--            </ul>-->
+
+<!--          </div>-->
+
+            <!--
+              All the links in the footer should remain intact.
+              You may remove the links only if you donate:
+              https://www.wowthemes.net/freebies-license/
+            -->
+<!--          <p>©  <span class="credits font-weight-bold">-->
+<!--            <a target="_blank" class="text-dark" href="https://ttiannaitt.github.io/">MovieMate Website & chatbot by <u>Yukun Tian;</u></a>-->
+<!--          </span>-->
+<!--			  <span class="credits font-weight-bold">-->
+<!--			  <a target="_blank" class="text-dark" href="https://github.com/yuqiansheng">MM Rating by <u>ZiHan Liu;</u></a>-->
+<!--			</span>-->
+<!--			  <span class="credits font-weight-bold">-->
+<!--			  <a target="_blank" class="text-dark" href="https://github.com/cyber-lin">Database by <u>Junlin Chen.</u></a>-->
+<!--			</span>-->
+<!--          </p>-->
+
+
+        </div>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $('#chat-form').on('submit', function (e) {
+            e.preventDefault();
+            let user_input = $('#user_input').val();
+            $('#user_input').val('');
+
+            if (user_input) {
+                let user_message = $('<p>').text('You: ' + user_input);
+                $('#chat-window').append(user_message);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '',
+                    data: {'user_input': user_input},
+                    dataType: 'json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    },
+                    success: function (data) {
+                        let bot_response = data.response;
+                        let bot_message = $('<p>').text('MovieMate: ' + bot_response);
+                        $('#chat-window').append(bot_message);
+                        $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

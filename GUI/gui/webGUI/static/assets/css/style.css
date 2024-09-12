@@ -1,0 +1,85 @@
+/* styles.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 700px; /* Increased width */
+    margin: 40px auto;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.main {
+    padding: 25px; /* Increased padding */
+    background-color: #f9f9f9;
+    height: 750px; /* Increased height */
+    overflow-y: auto;
+}
+
+#chat-window p {
+    background-color: #e1e1e1;
+    color: #333;
+    padding: 12px; /* Increased padding */
+    margin-bottom: 12px; /* Increased margin */
+    border-radius: 25px; /* Increased border radius */
+    max-width: 85%; /* Increased max-width */
+    display: inline-block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#chat-form {
+    display: flex;
+    padding: 15px; /* Increased padding */
+    background-color: #f1f1f1;
+    border-top: 1px solid #e1e1e1;
+}
+
+#user_input {
+    flex-grow: 1;
+    border: none;
+    padding: 12px; /* Increased padding */
+    border-radius: 25px 0 0 25px; /* Increased border radius */
+    margin-right: 10px;
+}
+
+#chat-form button {
+    border: none;
+    padding: 12px 25px; /* Increased padding */
+    border-radius: 0 25px 25px 0; /* Increased border radius */
+    background-color: #ff4d4d;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#chat-form button:hover {
+    background-color: #e60000;
+}
+
+/* Add some extra styles for user and bot messages */
+.user-message {
+    text-align: right;
+    background-color: #c8e6c9;
+}
+
+.bot-message {
+    text-align: left;
+    background-color: #e1e1e1;
+}
+
+/* Ensure that the send button is using Font Awesome */
+#chat-form button i {
+    margin-right: 5px;
+}

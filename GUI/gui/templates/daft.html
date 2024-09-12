@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  .chat-container {
+    width: 90%;
+    max-width: 600px;
+    height: 80%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .chat-message {
+    background-color: #e6e6e6;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+  .chat-message.sender {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+  }
+  .chat-input {
+    display: flex;
+    padding: 8px;
+    border-top: 1px solid #e6e6e6;
+  }
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    margin-right: 8px;
+  }
+  .chat-input button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+  }
+  .chat-input button:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+<div class="chat-container">
+  <div class="chat-messages" id="chat-messages">
+    <!-- Chat messages will be displayed here -->
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chat-input" placeholder="输入消息...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+// 用于存储聊天消息
+let messages = [];
+
+function displayMessage(text, sender) {
+  const messagesContainer = document.getElementById('chat-messages');
+  const messageElement = document.createElement('div');
+  messageElement.textContent = text;
+  messageElement.classList.add('chat-message');
+  if (sender === 'user') {
+    messageElement.classList.add('sender');
+  }
+  messagesContainer.appendChild(messageElement);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight; // 自动滚动到最新消息
+}
+
+function sendMessage() {
+  const inputElement = document.getElementById('chat-input');
+  const message = inputElement.value;
+  if (message.trim() !== '') {
+    displayMessage(message, 'user');
+    inputElement.value = ''; // 清空输入框
+    // 发送消息到服务器
+    fetch('/chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `message=${encodeURIComponent(message)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      displayMessage(data.message, 'bot');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
+}
+
+
+// 模拟接收到消息
+function receiveMessage(text) {
+  displayMessage(text, 'bot');
+}
+
+// 示例：模拟接收到欢迎消息
+setTimeout(() => {
+  receiveMessage("Hello! I've chosen a film. Guess what it is?");
+}, 1000);
+</script>
+</body>
+</html>
