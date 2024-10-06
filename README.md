@@ -5,7 +5,7 @@ MovieMate is a general website about movie recommendation, custom movie assistan
  <img src="https://github.com/user-attachments/assets/1c988384-8b76-4523-ada5-bd1d241332c5" alt="image" width="300" />  
 
 ## Timeline
-2024.10 online publish
+2024.10 online publish & new MMRating 
 
  ## Repo Structure
 ```
